@@ -1,0 +1,9 @@
+---
+# This playbook will list TVO workloads
+
+- name: List Workloads
+  hosts: localhost
+  vars_files:
+    config.yaml
+  roles:
+  - tvo-workloads
