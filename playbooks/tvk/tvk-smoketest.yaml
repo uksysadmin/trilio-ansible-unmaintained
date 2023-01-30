@@ -1,0 +1,73 @@
+---
+# This set of playbooks will perform a smoketest of TVK 
+#
+# - check for kubectl and oc (if openshift)
+# - create the demo app in the namespace specified in /vagrant/tvk-config.yaml
+# - create a target as specified in the tvk-config.yaml
+# - create a backupplan as specified
+# - perform a backup
+# - restore application to a newly created ns
+#
+#
+
+###### CONFIGURATION #######
+# See tvk-config.yaml
+############################
+#
+
+- name: Kubernetes Environment Check
+  hosts: localhost
+  vars_files:
+    tvk-config.yaml
+  roles:
+  - check-environment
+
+- name: Create Demo Applications
+  hosts: localhost
+  vars_files:
+    tvk-config.yaml
+  roles:
+  - create-demo-app
+
+- name: Create Backup Target
+  hosts: localhost
+  vars_files:
+    tvk-config.yaml
+  roles:
+  - create-target
+
+- name: Create Backup Plan
+  hosts: localhost
+  vars_files:
+    tvk-config.yaml
+  roles:
+  - create-backupplan
+
+- name: Create Backup of Deployed Application
+  hosts: localhost
+  pre_tasks:
+    - set_fact:
+        timestamp: "{{ lookup('pipe', 'date +%Y%m%d%H%M%S') }}"
+  vars_files:
+    tvk-config.yaml
+  roles:
+  - perform-backup
+
+- name: Perform restore to specified restore namespace
+  hosts: localhost
+  vars_files:
+    tvk-config.yaml
+  roles:
+  - perform-restore
+
+#- name: DR/Application and Data Migration to second cluster
+#  hosts: localhost
+#  user: vagrant
+#  vars_files:
+#    tvk-config.yaml
+#  roles:
+#    - role: create-target
+#      kubeconfig: "{{ dr_kubeconfig }}"
+#      namespace: "{{ dr_restored_namespace }}"
+#    - disaster-recovery
+ 

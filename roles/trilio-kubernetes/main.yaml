@@ -1,0 +1,11 @@
+- include_tasks: tvk_check.yaml
+  when:
+  - tvk_check | bool
+
+- include_tasks: tvk_smoketest.yaml
+  when:
+  - tvk_smoketest | bool
+
+- include_tasks: tvk_create_target.yaml
+  when:
+  - tvk_create_target | bool

@@ -1,0 +1,47 @@
+---
+# Distro/Platform
+# Note: 'openshift' assumes kubernetes and oc tools installed
+kubernetes_distro: openshift		   # kubernetes | openshift
+
+# Specify path to Kubeconfig
+kubeconfig: /vagrant/kubeconfig-ocp-staging
+
+# For S3 based targets, create secret.yaml manually
+# before executing playbook. Specify path to created secret.yaml.
+secret_yaml: /vagrant/ansible/secret.yaml  # Needs creating
+secret_name: aws-secret                    # Ensure secret_name is what is referenced in created file
+
+# app yaml to deploy
+namespace: smoketest
+demo_app_yaml: /vagrant/ansible/demo-mysql-app.yaml
+
+#
+# Backup Target
+#
+# Currently assumes AWS S3
+# IMPORTANT: See templates/target.yaml.j2 to modify for other targets
+# TODO: Specify NFS or S3
+target_type: S3
+target_name: smoketest-target
+bucket_name: tvk-migration-demo1
+
+#
+# Backup Plan Details
+# Note this must be relevant to the test/demo app
+#
+backupplan_name: smoketest-app-backupplan
+backupplan_type: ns                        # ns|label
+backup_match_label: "app: k8s-demo-app"    # ignored for ns backup type
+
+#
+# Perform Backup
+backup_prefix: "{{ backupplan_name }}"
+backup_type: Full                          # Full | Incremental
+
+# Perform Restore (to new ns)
+restore_namespace: smoketest-restore
+
+# Used for migration/DR smoketest
+dr_restored_namespace: dr-restore
+dr_backupplan: "{{ backupplan_name }}"        # if specified, uses last known backup
+location_id:                               # can specify which backup to restore to if known

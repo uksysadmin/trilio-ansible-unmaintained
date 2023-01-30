@@ -1,0 +1,9 @@
+- name: Kubernetes Environment Check
+  hosts: localhost
+  vars_files:
+    tvk-config.yaml
+  roles:
+    - trilio-kubernetes
+  vars:
+    tvk_check: true
+
