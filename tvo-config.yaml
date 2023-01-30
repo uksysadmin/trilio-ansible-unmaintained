@@ -1,0 +1,18 @@
+# OpenStack RC Environment Files
+# This example playbook/roles assume an admin doesn't have a user in the tenant_source account
+# and therefore will switch between users to get the information needed
+#
+os_config_user_source_rc: user-tenant-env.rc
+os_config_user_destination_rc: user-destination-tenant-env.rc
+os_user: user
+os_config_admin_rc: admin.rc
+rc_admin: admin
+
+
+# We will take the workload_name from tenant_source,
+# reassign it to the user in tenant_source
+# and perform a selective restore of the last backup in
+# tenant_destination
+os_source_tenant: user-demo
+tvo_workload_name: "Fileserver Workload"
+os_destination_destination: user-restore
