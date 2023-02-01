@@ -1,11 +1,18 @@
-- include_tasks: tvk_check.yaml
+- name: TVK Environment Check
+  include_tasks: tvk_check.yaml
   when:
   - tvk_check | bool
+  tags:
+  - check
 
-- include_tasks: tvk_smoketest.yaml
-  when:
-  - tvk_smoketest | bool
 
-- include_tasks: tvk_create_target.yaml
+#- include_tasks: tvk_smoketest.yaml
+#  when:
+#  - tvk_smoketest | bool
+
+- name: TVK Create Backup Target
+  include_tasks: tvk_create_target.yaml
   when:
   - tvk_create_target | bool
+  tags:
+  - create_target

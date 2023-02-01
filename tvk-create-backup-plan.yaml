@@ -3,8 +3,7 @@
 
 - name: Create Backup Plan
   hosts: localhost
-  user: vagrant
   vars_files:
-    config.yaml
+    tvk-config.yaml
   roles:
-  - create-backupplan
+  - trilio-kubernetes

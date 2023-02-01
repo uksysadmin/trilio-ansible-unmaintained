@@ -3,8 +3,16 @@
 
 - name: Create Demo Applications
   hosts: localhost
-  user: vagrant
   vars_files:
-    config.yaml
+    tvk-config.yaml
   roles:
   - create-demo-app
+
+- name: Create Demo Application
+  hosts: localhost
+  vars_files:
+    tvk-config.yaml
+  roles:
+    - trilio-kubernetes
+  vars:
+    tvk_deploy_demo_app: true

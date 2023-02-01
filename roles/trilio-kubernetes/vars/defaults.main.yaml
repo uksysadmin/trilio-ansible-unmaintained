@@ -1,0 +1,3 @@
+tvk_check: true
+tvk_smoketest: false
+tvk_create_target: false

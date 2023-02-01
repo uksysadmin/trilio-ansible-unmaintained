@@ -1,46 +1,59 @@
----
-- name: Create {{ namespace}} namespace
-  k8s:
+- name: Create {{ tvk_namespace }} namespace
+  kubernetes.core.k8s:
     kubeconfig: "{{ kubeconfig }}"
-    name: "{{ namespace }}" # defining the namespace
+    name: "{{ tvk_namespace }}" # defining the namespace
     api_version: v1
     kind: Namespace
-    state: present    # State=present when you need to create new object
+    validate_certs: false
+    state: present # State=present when you need to create new object
 
 # Create a secret using file stored locally
+- name: Configure the secret yaml
+  template:
+    src: templates/secrets.yaml.j2
+    dest: /tmp/secrets.yaml
+    mode: 0600
+  register: k8s_secret
 
-- name: Create the secret used by the S3 target in the {{ namespace }} namespacet
-  k8s:
+- name: Create the secret used by the S3 target in the {{ tvk_namespace }} namespace
+  kubernetes.core.k8s:
     kubeconfig: "{{ kubeconfig }}"
-    state: present      # State=present when you need to create new object
-    namespace: "{{ namespace }}"  # namespace for the secret
-    src: "{{ secret_yaml }}"
+    state: present # State=present when you need to create new object
+    namespace: "{{ tvk_namespace }}" # namespace for the secret
+    validate_certs: false
+    src: /tmp/secrets.yaml
   register: secret
+  when: k8s_secret.changed
+
+- name: Remove temporary secret yaml
+  ansible.builtin.file:
+    path: /tmp/secrets.yaml
+    state: absent
 
 # Create the S3 target in specified namespace
 
-- name: Configure the target yaml
-  template:
-    src: /vagrant/templates/target.yaml.j2
-    dest: /tmp/target.yaml
+#- name: Configure the target yaml
+#  template:
+#    src: templates/target.yaml.j2
+#    dest: /tmp/target.yaml
 
-- name: Create the "{{ target_name }}" target in the {{ namespace }} namespace
-  k8s:
-    kubeconfig: "{{ kubeconfig }}"
-    state: present      # State=present when you need to create new object
-    namespace: "{{ namespace }}"  # defining the namespace
-    src: "/tmp/target.yaml"
-  register: target
+#- name: Create the "{{ target_name }}" target in the {{ namespace }} namespace
+#  kubernetes.core.k8s:
+#    kubeconfig: "{{ kubeconfig }}"
+#    state: present # State=present when you need to create new object
+#    namespace: "{{ namespace }}" # defining the namespace
+#    src: "/tmp/target.yaml"
+#  register: target
 
-- name: Wait for "{{ target_name }}" target to be created in the {{ namespace }} namespace
-  shell: >
-    kubectl get targets/"{{ target_name }}" -n {{ namespace }}
-  environment:
-    KUBECONFIG: "{{ kubeconfig }}"
-  register: target_available
-  retries: 5
-  delay: 5
-  until: target_available.stdout.find("Available") != -1
+#- name: Wait for "{{ target_name }}" target to be created in the {{ namespace }} namespace
+#  shell: >
+#    kubectl get targets/"{{ target_name }}" -n {{ namespace }}
+#  environment:
+#    KUBECONFIG: "{{ kubeconfig }}"
+#  register: target_available
+#  retries: 5
+#  delay: 5
+#  until: target_available.stdout.find("Available") != -1
 
-- debug:
-    var: target_available.stdout_lines
+#- debug:
+#    var: target_available.stdout_lines

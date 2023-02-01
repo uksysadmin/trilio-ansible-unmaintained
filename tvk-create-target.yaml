@@ -1,0 +1,40 @@
+# Description: Playbook that creates a target in a specfied namespace
+# Author: Trilio SA Team
+
+#
+# Prerequisite for S3 Targets - secret and access keys
+#
+# Create and include an encrypted Ansible Vault file that has the following in:
+# e.g. secrets.enc and fill in the values. Password protect it.
+# # file start
+# secrets:
+#  - name: s3-access-secret
+#    type: generic
+#    data:
+#      - key: accessKey
+#        value: 
+#      - key: secretKey
+#        value:
+# # file end 
+#
+# Once created execute the following to encrypt:
+#
+# ansible-vault encrypt secrets.enc
+#
+# To use this Playbook
+# either specify your vault password in a file called password_file (protect with chmod 0600)
+#   ansible-playbook -e @secrets.enc --vault-password-file password_file trilio-create-target.yml
+# or
+#   ansible-playbook -e @secrets.enc --ask-vault-pass tvk-create-target.yml
+
+- name: Create Backup Target in {{ tvk_namespace }}
+  hosts: localhost
+  tasks:
+    - name: Create Target
+      ansible.builtin.import_role:
+        name: trilio-kubernetes
+        tasks_from: tvk_create_target
+  vars_files:
+    tvk-config.yaml
+  vars:
+    tvk_create_target: true
