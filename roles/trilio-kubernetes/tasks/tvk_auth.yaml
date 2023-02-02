@@ -1,0 +1,41 @@
+# Set of tasks that will authenticate to K8s or OpenShift
+# User can use kubeconfig or user/pass
+# If a user is authenticating using username/password:
+# Create an encrypted vault file with the following format
+# k8s_username: 
+# k8s_password:
+# Pass this encrypted vault file on the ansible command line
+#
+# Authors: Kevin Jackson <kevin.jackson at trilio io>
+
+- name: Kubernetes Authentication
+  block:
+    - name: Log in to OpenShift (obtain access token)
+      community.okd.openshift_auth:
+        username: "{{ k8s_username }}"
+        password: "{{ k8s_password }}"
+        validate_certs: false
+        host: "{{ kube_auth_api }}"
+      register: openshift_auth_results
+      when: 
+        - kube_distro == 'openshift'
+        - kube_auth_type == 'password'
+
+    - name: Log in to Kubernetes (obtain access token)
+      ansible.builtin.k8s_auth:
+        username: "{{ k8s_username }}"
+        password: "{{ k8s_password }}"
+        validate_certs: false
+        host: "{{ kube_auth_api }}"
+      register: k8s_auth_results
+      when: 
+        - kube_distro == 'kubernetes'
+        - kube_auth_type == 'password'
+
+    - name: Check Kubeconfig is available
+      stat:
+        path: "{{ kubeconfig }}"
+      register: k8s_auth_results
+      when: kube_auth_type == 'kubeconfig'
+  tags:
+    - auth

@@ -1,9 +1,0 @@
----
-# This playbook will create the backupplan in the namespace specified in /vagrant/config.yaml
-
-- name: Create Backup Plan
-  hosts: localhost
-  vars_files:
-    tvk-config.yaml
-  roles:
-  - trilio-kubernetes

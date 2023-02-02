@@ -1,0 +1,9 @@
+# Set of tasks for creating a Trilio for Kubernetes Target in a namespace
+# for storing backups
+#
+# Authors: Kevin Jackson <kevin.jackson at trilio io>
+
+- name: Create Target in {{ tvk_namespace }}
+  include_tasks: tvk_create_target.yaml
+  when: tvk_create_target | bool
+  tags: ['smoketest']

@@ -1,0 +1,14 @@
+# Description: Playbook that executes the tvk_auth tasks
+# Authors: Kevin Jackson <kevin.jackson at trilio io>
+
+- name: Log into Kubernetes
+  hosts: localhost
+  tasks:
+    - name: Kubernetes Authentication
+      ansible.builtin.import_role:
+        name: trilio-kubernetes
+        tasks_from: tvk_auth
+  vars_files:
+    tvk-config.yaml
+  vars:
+    tvk_check: false

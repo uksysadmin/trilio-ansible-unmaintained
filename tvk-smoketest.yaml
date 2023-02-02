@@ -15,59 +15,11 @@
 ############################
 #
 
-- name: Kubernetes Environment Check
+- name: Trilio for Kubernetes Smoketest
   hosts: localhost
   vars_files:
     tvk-config.yaml
   roles:
-  - check-environment
-
-- name: Create Demo Applications
-  hosts: localhost
-  vars_files:
-    tvk-config.yaml
-  roles:
-  - create-demo-app
-
-- name: Create Backup Target
-  hosts: localhost
-  vars_files:
-    tvk-config.yaml
-  roles:
-  - create-target
-
-- name: Create Backup Plan
-  hosts: localhost
-  vars_files:
-    tvk-config.yaml
-  roles:
-  - create-backupplan
-
-- name: Create Backup of Deployed Application
-  hosts: localhost
-  pre_tasks:
-    - set_fact:
-        timestamp: "{{ lookup('pipe', 'date +%Y%m%d%H%M%S') }}"
-  vars_files:
-    tvk-config.yaml
-  roles:
-  - perform-backup
-
-- name: Perform restore to specified restore namespace
-  hosts: localhost
-  vars_files:
-    tvk-config.yaml
-  roles:
-  - perform-restore
-
-#- name: DR/Application and Data Migration to second cluster
-#  hosts: localhost
-#  user: vagrant
-#  vars_files:
-#    tvk-config.yaml
-#  roles:
-#    - role: create-target
-#      kubeconfig: "{{ dr_kubeconfig }}"
-#      namespace: "{{ dr_restored_namespace }}"
-#    - disaster-recovery
- 
+  - trilio-kubernetes
+  vars:
+    tvk_smoketest: true

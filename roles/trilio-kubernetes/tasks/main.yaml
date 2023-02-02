@@ -1,18 +1,14 @@
-- name: TVK Environment Check
+- name: Authentication to Kubernetes
+  include_tasks: tvk_auth.yaml
+  when: tvk_auth | bool
+  tags: ['auth', 'smoketest']
+
+- name: Basic Trilio for Kubernetes Checks
   include_tasks: tvk_check.yaml
-  when:
-  - tvk_check | bool
-  tags:
-  - check
+  when: tvk_check | bool
+  tags: ['check', 'smoketest']
 
-
-#- include_tasks: tvk_smoketest.yaml
-#  when:
-#  - tvk_smoketest | bool
-
-- name: TVK Create Backup Target
-  include_tasks: tvk_create_target.yaml
-  when:
-  - tvk_create_target | bool
-  tags:
-  - create_target
+- name: Trilio for Kubernetes Smoketest
+  include_tasks: tvk_smoketest.yaml
+  when: tvk_smoketest | bool
+  tags: ['smoketest']

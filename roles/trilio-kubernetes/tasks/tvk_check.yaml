@@ -2,19 +2,21 @@
 # - Valid Trilio for Kubernetes License
 # - CSI Drivers Present
 # - VolumeSnapshot CRDs
+#
+# Authors: Kevin Jackson <kevin.jackson at trilio io>
+
+- name: Authentication to Kubernetes
+  include_tasks: tvk_auth.yaml
+  when: tvk_auth | bool
+  tags: auth
+
 - name: Basic Kubernetes Checks
   block:
-  - name: Authentication to Kubernetes
-    kubernetes.core.k8s_info:
-      api_version: triliovault.trilio.io/v1
-      kind: Pods
-      namespace: default
-      validate_certs: false
-    register: auth
   - name: Check for kubectl
     stat:
       path: /usr/local/bin/kubectl
     register: kubectl
+  tags: check
 
 - name: Trilio for Kubernetes Prerequisite Checks
   block:
@@ -25,12 +27,15 @@
       namespace: openshift-operators
       validate_certs: false
     register: license
+    when: kube_distro == 'openshift'
+
   - name: Checking for CSI Drivers
     kubernetes.core.k8s_info:
       api_version: storage.k8s.io/v1
       kind: CSIDriver
       validate_certs: false
     register: csidrivers
+
   - name: Checking for VolumeSnapshot CRD
     kubernetes.core.k8s_info:
       api_version: apiextensions.k8s.io/v1
@@ -38,6 +43,7 @@
       name: volumesnapshot.snapshot.storage.k8s.io
       validate_certs: false
     register: volumesnapshot
+
   - name: Checking for VolumeSnapshotClass CRD
     kubernetes.core.k8s_info:
       api_version: apiextensions.k8s.io/v1
@@ -45,6 +51,7 @@
       name: volumesnapshotclasses.snapshot.storage.k8s.io
       validate_certs: false
     register: volumesnapshotclasses
+
   - name: Checking for VolumeSnapshotContent CRD
     kubernetes.core.k8s_info:
       api_version: apiextensions.k8s.io/v1
@@ -52,7 +59,11 @@
       name: volumesnapshotclasses.snapshot.storage.k8s.io
       validate_certs: false
     register: volumesnapshotcontent
+
   rescue:
   - name: Warn user on TVK errors
     ansible.builtin.debug:
       msg: 'Unable to perform TVK checks'
+
+  tags:
+  - check

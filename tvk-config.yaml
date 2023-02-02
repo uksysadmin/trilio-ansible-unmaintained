@@ -1,16 +1,23 @@
 # Trilio For Kubernetes
+# Authors: Kevin Jackson <kevin.jackson at trilio io>
+#
+
+# Specify environment/auth details - username/pass (in a vault specified on cli)
+# Username/Pass
+# Note: 'openshift' assumes kubernetes and oc tools installed
+kube_distro: openshift # kubernetes | openshift
+kube_auth_type: password # password | kubeconfig
+kube_auth_api: https://api.dc3.demo.presales.trilio.io:6443 # auth API server if not using kubeconfig
+# Kubeconfig
+kubeconfig: # path to kubeconfig file if kube_auth_type is 'kubeconfig'
+
+# Always authenticate unless you have a reason to skip this
+tvk_auth: true
 # Performs a check of the license and other prequisites
 tvk_check: true
-
 # Uses the values in the config file to create a demo app, target, backuppplan, backup and restore.
-tvk_smoketest: false
-
-# Distro/Platform
-# Note: 'openshift' assumes kubernetes and oc tools installed
-kubernetes_distro: openshift # kubernetes | openshift
-
-# Specify path to Kubeconfig
-kubeconfig: ~/kubeconfig-ocp-staging
+# Set this value for first installation test
+tvk_smoketest: true
 
 # app yaml to deploy
 tvk_deploy_demo_app: false
@@ -23,7 +30,7 @@ tvk_demo_app_yaml: files/demo-mysql-app.yaml
 # Currently assumes AWS S3
 # IMPORTANT: See templates/target.yaml.j2 to modify for other targets
 # TODO: Specify NFS or S3
-tvk_create_target: false
+tvk_create_target: true
 tvk_target_type: S3
 tvk_target_name: smoketest-target
 tvk_s3_bucket_name: tvk-migration-demo1

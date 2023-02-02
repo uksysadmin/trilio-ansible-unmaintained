@@ -10,4 +10,5 @@
   vars_files:
     tvk-config.yaml
   vars:
+    tvk_auth: true
     tvk_check: true

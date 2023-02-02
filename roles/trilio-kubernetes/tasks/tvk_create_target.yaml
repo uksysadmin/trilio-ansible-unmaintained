@@ -1,34 +1,41 @@
-- name: Create {{ tvk_namespace }} namespace
-  kubernetes.core.k8s:
-    kubeconfig: "{{ kubeconfig }}"
-    name: "{{ tvk_namespace }}" # defining the namespace
-    api_version: v1
-    kind: Namespace
-    validate_certs: false
-    state: present # State=present when you need to create new object
+# Set of tasks for creating a Trilio for Kubernetes Target in a namespace
+# for storing backups
+#
+# Authors: Kevin Jackson <kevin.jackson at trilio io>
 
-# Create a secret using file stored locally
-- name: Configure the secret yaml
-  template:
-    src: templates/secrets.yaml.j2
-    dest: /tmp/secrets.yaml
-    mode: 0600
-  register: k8s_secret
+- name: Create Target
+  block:
+  - name: Create {{ tvk_namespace }} namespace
+    kubernetes.core.k8s:
+      name: "{{ tvk_namespace }}" # defining the namespace
+      api_version: v1
+      kind: Namespace
+      validate_certs: false
+      state: present # State=present when you need to create new object
 
-- name: Create the secret used by the S3 target in the {{ tvk_namespace }} namespace
-  kubernetes.core.k8s:
-    kubeconfig: "{{ kubeconfig }}"
-    state: present # State=present when you need to create new object
-    namespace: "{{ tvk_namespace }}" # namespace for the secret
-    validate_certs: false
-    src: /tmp/secrets.yaml
-  register: secret
-  when: k8s_secret.changed
+  # Create a secret using file stored locally
+  - name: Configure the secret yaml
+    template:
+      src: templates/secrets.yaml.j2
+      dest: /tmp/secrets.yaml
+      mode: 0600
+    register: k8s_secret
 
-- name: Remove temporary secret yaml
-  ansible.builtin.file:
-    path: /tmp/secrets.yaml
-    state: absent
+  - name: Create the secret used by the S3 target in the {{ tvk_namespace }} namespace
+    kubernetes.core.k8s:
+      # kubeconfig: "{{ kubeconfig }}"
+      state: present # State=present when you need to create new object
+      namespace: "{{ tvk_namespace }}" # namespace for the secret
+      validate_certs: false
+      src: /tmp/secrets.yaml
+    register: secret
+    when: k8s_secret.changed
+
+  - name: Remove temporary secret yaml
+    ansible.builtin.file:
+      path: /tmp/secrets.yaml
+      state: absent
+  tags: ['smoketest']
 
 # Create the S3 target in specified namespace
 
