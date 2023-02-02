@@ -1,11 +1,14 @@
 # trilio-ansible
 Set of Ansible Playbooks for Trilio Cloud-Native Intelligent Recovery products
 
-*Examples*
+# Examples
 
-ansible-playbook -e @secrets.env -e @auth.enc --vault-ask-pass tvk-check.yaml
-ansible-playbook -e @secrets.env -e @auth.enc --vault-ask-pass tvk-smoktest.yaml
-ansible-playbook -e @secrets.env -e @auth.enc --vault-ask-pass tvk-create-target.yaml
-ansible-playbook -e @secrets.env -e @auth.enc --vault-ask-pass tvk-create-backup.yaml
+ansible-playbook -e @secrets.enc -e @auth.enc -e @auth.enc --vault-ask-pass tvk-check.yaml<br>
+ansible-playbook -e @secrets.enc -e @auth.enc -e @auth.enc --vault-ask-pass tvk-create-target.yaml<br>
+ansible-playbook -e @secrets.enc -e @auth.enc -e @auth.enc --vault-ask-pass tvk-create-backup.yaml<br>
+<br>
+ansible-playbook -e @secrets.enc -e @auth.enc -e @auth.enc --vault-ask-pass tvk-smoktest.yaml --tags "auth"<br>
+ansible-playbook -e @secrets.enc -e @auth.enc -e @auth.enc --vault-ask-pass tvk-smoktest.yaml --tags "check"<br>
+ansible-playbook -e @secrets.enc -e @auth.enc -e @auth.enc --vault-ask-pass tvk-smoktest.yaml --tags "auth,smoktest"<br>
 
 Authors: Kevin Jackson <kevin.jackson at trilio io>
