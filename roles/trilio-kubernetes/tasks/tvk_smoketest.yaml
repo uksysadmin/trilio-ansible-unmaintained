@@ -6,4 +6,4 @@
 - name: Create Target in {{ tvk_namespace }}
   include_tasks: tvk_create_target.yaml
   when: tvk_create_target | bool
-  tags: ['smoketest']
+  tags: ['smoketest', 'target', 'namespace', 'secret']

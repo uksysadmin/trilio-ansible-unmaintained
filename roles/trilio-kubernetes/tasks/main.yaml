@@ -11,4 +11,4 @@
 - name: Trilio for Kubernetes Smoketest
   include_tasks: tvk_smoketest.yaml
   when: tvk_smoketest | bool
-  tags: ['smoketest']
+  tags: ['smoketest', 'target', 'namespace', 'secret']

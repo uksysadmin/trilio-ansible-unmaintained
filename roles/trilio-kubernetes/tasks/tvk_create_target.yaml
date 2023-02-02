@@ -3,7 +3,7 @@
 #
 # Authors: Kevin Jackson <kevin.jackson at trilio io>
 
-- name: Create Target
+- name: Create Namespace
   block:
   - name: Create {{ tvk_namespace }} namespace
     kubernetes.core.k8s:
@@ -12,7 +12,10 @@
       kind: Namespace
       validate_certs: false
       state: present # State=present when you need to create new object
+  tags: ["namespace", "smoketest"]
 
+- name: Create Secret for S3
+  block:
   # Create a secret using file stored locally
   - name: Configure the secret yaml
     template:
@@ -35,32 +38,38 @@
     ansible.builtin.file:
       path: /tmp/secrets.yaml
       state: absent
-  tags: ['smoketest']
+  tags: ['secret', 'smoketest']
+  when: tvk_target_type | lower == "s3"
 
-# Create the S3 target in specified namespace
+- name: Create Target
+  block:
+  # Create a target yaml locally
+  - name: Configure the target yaml
+    template:
+      src: templates/target.yaml.j2
+      dest: /tmp/target.yaml
 
-#- name: Configure the target yaml
-#  template:
-#    src: templates/target.yaml.j2
-#    dest: /tmp/target.yaml
+  - name: Create the "{{ tvk_target_name }}" target in the {{ tvk_namespace }} namespace
+    kubernetes.core.k8s:
+      state: present # State=present when you need to create new object
+      namespace: "{{ tvk_namespace }}" # defining the namespace
+      src: "/tmp/target.yaml"
+      validate_certs: false
+    register: target
 
-#- name: Create the "{{ target_name }}" target in the {{ namespace }} namespace
-#  kubernetes.core.k8s:
-#    kubeconfig: "{{ kubeconfig }}"
-#    state: present # State=present when you need to create new object
-#    namespace: "{{ namespace }}" # defining the namespace
-#    src: "/tmp/target.yaml"
-#  register: target
-
-#- name: Wait for "{{ target_name }}" target to be created in the {{ namespace }} namespace
-#  shell: >
-#    kubectl get targets/"{{ target_name }}" -n {{ namespace }}
-#  environment:
-#    KUBECONFIG: "{{ kubeconfig }}"
-#  register: target_available
-#  retries: 5
-#  delay: 5
-#  until: target_available.stdout.find("Available") != -1
+  # TODO: if not using kubeconfig auth, how to do kubectl?
+  - name: Wait for "{{ tvk_target_name }}" target to be created in the {{ tvk_namespace }} namespace
+    shell: >
+      kubectl get targets/"{{ tvk_target_name }}" -n {{ tvk_namespace }}
+    environment:
+      KUBECONFIG: "{{ kubeconfig }}"
+    register: target_available
+    retries: 5
+    delay: 5
+    until: target_available.stdout.find("Available") != -1
+    when: kube_auth_type == "kubeconfig"
+  when: tvk_target_type | lower == "s3" # only s3 for now, template will have logic
+  tags: ['target', 'smoketest']
 
 #- debug:
 #    var: target_available.stdout_lines
