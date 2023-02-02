@@ -18,6 +18,15 @@
     register: kubectl
   tags: check
 
+- name: Basic OpenShift Checks
+  block:
+  - name: Check for oc
+    stat:
+      path: /usr/local/bin/oc
+    register: oc
+  tags: check
+  when: kube_distro == "openshift"
+
 - name: Trilio for Kubernetes Prerequisite Checks
   block:
   - name: Checking for Trilio License
