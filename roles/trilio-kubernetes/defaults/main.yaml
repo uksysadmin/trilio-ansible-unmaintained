@@ -2,4 +2,5 @@ tvk_check: true
 tvk_smoketest: false
 tvk_create_target: false
 tvk_deploy_demo_app: false
+tvk_create_backupplan: false
 kubernetes_distro: kubernetes

@@ -4,15 +4,9 @@
 # Authors: Kevin Jackson <kevin.jackson at trilio io>
 
 - name: Create Namespace
-  block:
-  - name: Create {{ tvk_namespace }} namespace
-    kubernetes.core.k8s:
-      name: "{{ tvk_namespace }}" # defining the namespace
-      api_version: v1
-      kind: Namespace
-      validate_certs: false
-      state: present # State=present when you need to create new object
-  tags: ["namespace", "smoketest"]
+  ansible.builtin.include_tasks: tvk_create_ns.yaml
+  when: tvk_namespace | bool
+  tags: ['namespace', 'smoketest', 'create_target']
 
 - name: Create Secret for S3
   block:
@@ -26,7 +20,6 @@
 
   - name: Create the secret used by the S3 target in the {{ tvk_namespace }} namespace
     kubernetes.core.k8s:
-      # kubeconfig: "{{ kubeconfig }}"
       state: present # State=present when you need to create new object
       namespace: "{{ tvk_namespace }}" # namespace for the secret
       validate_certs: false

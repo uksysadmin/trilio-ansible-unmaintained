@@ -5,10 +5,10 @@
 #
 # Authors: Kevin Jackson <kevin.jackson at trilio io>
 
-- name: Authentication to Kubernetes
-  include_tasks: tvk_auth.yaml
-  when: tvk_auth | bool
-  tags: auth
+#- name: Authentication to Kubernetes
+#  include_tasks: tvk_auth.yaml
+#  when: tvk_auth | bool
+#  tags: auth
 
 - name: Basic Kubernetes Checks
   block:
@@ -16,7 +16,7 @@
     stat:
       path: /usr/local/bin/kubectl
     register: kubectl
-  tags: check
+  tags: ['check', 'smoketest']
 
 - name: Basic OpenShift Checks
   block:
@@ -24,7 +24,7 @@
     stat:
       path: /usr/local/bin/oc
     register: oc
-  tags: check
+  tags: ['check', 'smoketest']
   when: kube_distro == "openshift"
 
 - name: Trilio for Kubernetes Prerequisite Checks
@@ -74,5 +74,4 @@
     ansible.builtin.debug:
       msg: 'Unable to perform TVK checks'
 
-  tags:
-  - check
+  tags: ['check', 'smoketest']
