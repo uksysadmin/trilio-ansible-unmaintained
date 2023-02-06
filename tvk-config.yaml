@@ -19,6 +19,9 @@ tvk_check: true
 # Set this value for first installation test
 tvk_smoketest: true
 
+# Search for recommended NS to backup
+tvk_search: true
+
 # app yaml to deploy
 tvk_deploy_demo_app: true
 tvk_namespace: smoketest1

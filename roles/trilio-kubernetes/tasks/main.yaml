@@ -13,6 +13,11 @@
   when: tvk_check | bool
   tags: ['check']
 
+- name: Searching for Backup Recommendations
+  ansible.builtin.include_tasks: tvk_search.yaml
+  when: tvk_search | bool
+  tags: ['search']
+
 - name: Trilio for Kubernetes Deploy App
   ansible.builtin.include_tasks: tvk_deploy_app.yaml
   when: tvk_deploy_demo_app | bool

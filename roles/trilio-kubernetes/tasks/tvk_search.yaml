@@ -1,0 +1,16 @@
+# Set of tasks that will check a Kubernetes cluster for
+# - Any NS with a PVC
+#
+# Authors: Kevin Jackson <kevin.jackson at trilio io>
+
+- name: Checking for PVCs
+  kubernetes.core.k8s_info:
+    kind: PersistentVolumeClaim
+    validate_certs: false
+  register: pvc_list
+  tags: ['search']
+
+- name: Found Namespaces with PVCs
+  debug:
+    msg: "recommendation_list: {{ pvc_list | json_query('resources[*].metadata.namespace')  }} "
+  tags: ['search']
