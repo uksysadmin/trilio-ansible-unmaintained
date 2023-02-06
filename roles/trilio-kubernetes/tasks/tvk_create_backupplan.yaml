@@ -7,7 +7,7 @@
   block:
   - name: Configure backup plan in {{ tvk_namespace }}
     template:
-      src: templates/backupplan.yaml.j2
+      src: templates/{{ tvk_backupplan_name }}-backupplan.yaml.j2
       dest: /tmp/backupplan.yaml
 
   # Create the specified backup plan in specifed namespace
@@ -46,5 +46,5 @@
     - kube_auth_type == "password"
     - kube_distro == "openshift"
   - debug: var=backupplan_available.stdout_lines
-  tags: ['backupplan', 'smoketest']
+  tags: ['backupplan', 'smoketest', 'autoprotect']
 

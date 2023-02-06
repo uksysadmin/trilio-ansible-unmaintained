@@ -8,5 +8,5 @@
   - name: Configure backup plan in {{ tvk_namespace }}
     template:
       src: templates/backupplan.yaml.j2
-      dest: /tmp/"{{ tvk_namespace }}"-backupplan.yaml
+      dest: /tmp/{{ tvk_namespace }}-backupplan.yaml
   tags: ['search', 'autoprotect']

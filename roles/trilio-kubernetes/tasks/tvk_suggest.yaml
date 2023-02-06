@@ -34,6 +34,8 @@
   ansible.builtin.include_tasks: tvk_create_backupplan_test.yaml
   vars:
     tvk_namespace: "{{ item }}"
+    tvk_suggest_autoprotect: true
+    tvk_backupplan_name: "{{ tvk_namespace }}-autoprotect"
   with_items: "{{ recommended_ns_list }}"
   when: tvk_autoprotect | bool
   tags: ['autoprotect']
