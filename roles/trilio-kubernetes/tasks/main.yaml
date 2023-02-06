@@ -14,9 +14,9 @@
   tags: ['check']
 
 - name: Searching for Backup Recommendations
-  ansible.builtin.include_tasks: tvk_search.yaml
-  when: tvk_search | bool
-  tags: ['search']
+  ansible.builtin.include_tasks: tvk_suggest.yaml
+  when: tvk_suggest | bool
+  tags: ['suggest', 'search', 'autoprotect']
 
 - name: Trilio for Kubernetes Deploy App
   ansible.builtin.include_tasks: tvk_deploy_app.yaml

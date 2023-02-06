@@ -19,8 +19,13 @@ tvk_check: true
 # Set this value for first installation test
 tvk_smoketest: true
 
-# Search for recommended NS to backup
-tvk_search: true
+# Search for suggested NS to backup
+tvk_suggest: true
+# TODO:
+# Auto create NS Backup Plan 
+tvk_autoprotect: true
+# List of NS to exclude
+tvk_autoprotect_exclude: ['openshift-storage', 'jeff-restore-from-ocpdemo']
 
 # app yaml to deploy
 tvk_deploy_demo_app: true
