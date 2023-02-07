@@ -1,8 +1,0 @@
-- name: trilio-ansible-tvo
-  scm: git
-  src: https://github.com/uksysadmin/trilio-ansible-tvo
-  version: master
-- name: trilio-ansible-tvk
-  scm: git
-  src: https://github.com/uksysadmin/trilio-ansible-tvk
-  version: master
