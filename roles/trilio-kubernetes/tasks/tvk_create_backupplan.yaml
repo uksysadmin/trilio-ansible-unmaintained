@@ -8,14 +8,14 @@
   - name: Configure backup plan in {{ tvk_namespace }}
     template:
       src: templates/{{ tvk_backupplan_name }}-backupplan.yaml.j2
-      dest: /tmp/backupplan.yaml
+      dest: /tmp/{{ tvk_backupplan_name }}-backupplan.yaml
 
   # Create the specified backup plan in specifed namespace
   - name: Create the "{{ tvk_backupplan_name }}" backup plan in {{ tvk_namespace }} namespace
     kubernetes.core.k8s:
       state: present # State=present when you need to create new object
       namespace: "{{ tvk_namespace }}" # defining the namespace
-      src: "/tmp/backupplan.yaml"
+      src: "/tmp/{{ tvk_backupplan_name }}-backupplan.yaml"
       validate_certs: false
     register: backupplan
 

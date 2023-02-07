@@ -4,7 +4,7 @@
 
 # Specify environment/auth details - username/pass (in a vault specified on cli)
 # Username/Pass
-# Note: 'openshift' assumes kubernetes and oc tools installed
+# Note: 'openshift' assumes kubectl and oc tools installed
 kube_distro: openshift # kubernetes | openshift
 kube_auth_type: password # password | kubeconfig
 kube_auth_api: https://api.dc3.demo.presales.trilio.io:6443 # auth API server if not using kubeconfig
@@ -21,7 +21,6 @@ tvk_smoketest: true
 
 # Search for suggested NS to backup
 tvk_suggest: true
-# TODO:
 # Auto create NS Backup Plan 
 tvk_autoprotect: true
 # List of NS to exclude
@@ -42,10 +41,7 @@ tvk_create_target: true
 tvk_target_type: S3
 tvk_target_name: smoketest-target
 tvk_s3_bucket_name: tvk-migration-demo1
-# For S3 based targets, create secret.yaml manually
-# before executing playbook. Specify path to created secret.yaml.
-# tvk_secret_yaml: secret.yaml # Needs creating
-tvk_secret_name: s3-access-secret # Ensure secret_name is what is referenced in created file
+tvk_secret_name: s3-access-secret
 
 #
 # Backup Plan Details
