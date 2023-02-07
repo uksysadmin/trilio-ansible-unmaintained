@@ -7,7 +7,7 @@
 # Note: 'openshift' assumes kubectl and oc tools installed
 kube_distro: openshift # kubernetes | openshift
 kube_auth_type: password # password | kubeconfig
-kube_auth_api: https://api.dc3.demo.presales.trilio.io:6443 # auth API server if not using kubeconfig
+# kube_auth_api: https://api.dc2.demo.presales.trilio.io:6443 # auth API server if not using kubeconfig
 # Kubeconfig
 kubeconfig: # path to kubeconfig file if kube_auth_type is 'kubeconfig'
 

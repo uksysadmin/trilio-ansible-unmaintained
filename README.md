@@ -23,7 +23,9 @@ Configuration is done in *tvk-config.yaml* to allow for automation.<br>
 # Note: 'openshift' assumes kubectl and oc tools installed
 kube_distro: openshift # kubernetes | openshift
 kube_auth_type: password # password | kubeconfig
-kube_auth_api: https://auth_endpoint:6443/ # auth API server if not using kubeconfig
+# kube_auth_api: https://auth_endpoint:6443/ # auth API server if not using kubeconfig
+                                             # Recommend to store in auth.enc with credentials and
+                                             # encrypt and pass as -e @auth.enc
 # Kubeconfig
 kubeconfig: # path to kubeconfig file if kube_auth_type is 'kubeconfig'
 
@@ -82,6 +84,7 @@ tvk_dr_backupplan: "{{ backupplan_name }}" # if specified, uses last known backu
 tvk_location_id: # can specify which backup to restore to if known
 ```
 
+# Secrets 
 To create S3 based Trilio for Kubernetes Targets, a secret is used. This Play can create secrets from an encrypted vault with the following structure:
 
 ``` yaml
@@ -103,4 +106,21 @@ You would then specify this on the command line with<br>
 ansible-playbook -e @secrets.enc --vault-ask-pass tvk-utility.yaml
 ```
 
+# Authentication
+If using username/password authentication and not using kubeconfig specified in tvk-config.yaml<br>
+Then create a seperate file, *auth.enc*, and encrypt with the following structure:<br>
+``` yaml
+kube_auth_api: https://auth_endpoint_url:6443
+k8s_username: username
+k8s_password: password
+```
+Encrypt this file with the following:
+``` bash
+ansible-vault encrypt auth.enc
+```
+You would then specify this on the command line with<br>
+``` bash
+ansible-playbook -e @auth.enc -e @secrets.enc --vault-ask-pass tvk-utility.yaml
+```
+<br>
 Authors: Kevin Jackson <kevin.jackson at trilio io>
