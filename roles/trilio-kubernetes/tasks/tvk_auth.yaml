@@ -15,26 +15,34 @@
       username: "{{ k8s_username }}"
       password: "{{ k8s_password }}"
       validate_certs: false
-      host: "{{ kube_auth_api }}"
+      host: "{{ k8s_auth_api }}"
     register: openshift_auth_results
     when:
-    - kube_distro == 'openshift'
-    - kube_auth_type == 'password'
+    - k8s_distro == 'openshift'
+    - k8s_auth_type == 'password'
 
   - name: Log in to Kubernetes (obtain access token)
     ansible.builtin.k8s_auth:
       username: "{{ k8s_username }}"
       password: "{{ k8s_password }}"
       validate_certs: false
-      host: "{{ kube_auth_api }}"
+      host: "{{ k8s_auth_api }}"
     register: k8s_auth_results
     when:
-    - kube_distro == 'kubernetes'
-    - kube_auth_type == 'password'
+    - k8s_distro == 'kubernetes'
+    - k8s_auth_type == 'password'
 
   - name: Check Kubeconfig is available
     stat:
       path: "{{ kubeconfig }}"
     register: k8s_auth_results
-    when: kube_auth_type == 'kubeconfig'
+    when: k8s_auth_type == 'kubeconfig'
+
+  - name: Auth Fact Set
+    set_fact: k8s_auth_results="{{ openshift_auth_results }}"
+    when:
+    - k8s_distro == 'openshift'
+    - k8s_auth_type == 'password'
   tags: ['auth', 'smoketest']
+
+

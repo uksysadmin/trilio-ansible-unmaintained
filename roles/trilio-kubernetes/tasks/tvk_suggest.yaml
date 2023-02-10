@@ -12,6 +12,7 @@
   block:
   - name: Checking Namespaces for PVCs
     kubernetes.core.k8s_info:
+      api_key: "{{ k8s_auth_results.k8s_auth.api_key }}"
       kind: PersistentVolumeClaim
       validate_certs: false
     register: pvc_list
@@ -20,7 +21,7 @@
     set_fact:
       found_ns_list: "{{ pvc_list | json_query('resources[*].metadata.namespace')  }}"
 
-  - name: Remove Namespaces to be excluded
+  - name: Remove excluded Namespaces from suggestion
     set_fact:
       recommended_ns_list: "{{ found_ns_list | difference(tvk_autoprotect_exclude) }}"
 

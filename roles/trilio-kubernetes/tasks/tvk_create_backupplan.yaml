@@ -13,6 +13,7 @@
   # Create the specified backup plan in specifed namespace
   - name: Create the "{{ tvk_backupplan_name }}" backup plan in {{ tvk_namespace }} namespace
     kubernetes.core.k8s:
+      api_key: "{{ k8s_auth_results.k8s_auth.api_key }}"
       state: present # State=present when you need to create new object
       namespace: "{{ tvk_namespace }}" # defining the namespace
       src: "/tmp/{{ tvk_backupplan_name }}-backupplan.yaml"
@@ -31,11 +32,11 @@
     until: backupplan_available.stdout.find("Available") != -1
     ignore_errors: true
     when:
-    - kube_auth_type == "kubeconfig"
+    - k8s_auth_type == "kubeconfig"
 
   - name: Wait for "{{ tvk_backupplan_name }}" backup plan in {{ tvk_namespace }} namespace (token)
     shell: |
-      oc login "{{ kube_auth_api }} " --token="{{ openshift_auth_results.openshift_auth.api_key }}" --insecure-skip-tls-verify=true
+      oc login "{{ k8s_auth_api }} " --token="{{ openshift_auth_results.openshift_auth.api_key }}" --insecure-skip-tls-verify=true
       oc get backupplans/"{{ tvk_backupplan_name }}" -n {{ tvk_namespace }}
     register: backupplan_available
     retries: 5
@@ -43,8 +44,8 @@
     until: backupplan_available.stdout.find("Available") != -1
     ignore_errors: true
     when:
-    - kube_auth_type == "password"
-    - kube_distro == "openshift"
+    - k8s_auth_type == "password"
+    - k8s_distro == "openshift"
   - debug: var=backupplan_available.stdout_lines
   tags: ['backupplan', 'smoketest', 'autoprotect']
 

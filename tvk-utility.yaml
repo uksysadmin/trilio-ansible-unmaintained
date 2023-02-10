@@ -27,6 +27,9 @@
 
 - name: Trilio for Kubernetes Ansible Utility
   hosts: localhost
+  module_defaults:
+    group/k8s:
+      host: "{{ k8s_auth_api }}"
   vars_files: tvk-config.yaml
   roles:
     - trilio-kubernetes

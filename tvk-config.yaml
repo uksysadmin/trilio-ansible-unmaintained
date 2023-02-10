@@ -5,8 +5,8 @@
 # Specify environment/auth details - username/pass (in a vault specified on cli)
 # Username/Pass
 # Note: 'openshift' assumes kubectl and oc tools installed
-kube_distro: openshift # kubernetes | openshift
-kube_auth_type: password # password | kubeconfig
+k8s_distro: openshift # kubernetes | openshift
+k8s_auth_type: password # password | kubeconfig
 # kube_auth_api: https://api.dc2.demo.presales.trilio.io:6443 # auth API server if not using kubeconfig
 # Kubeconfig
 kubeconfig: # path to kubeconfig file if kube_auth_type is 'kubeconfig'
