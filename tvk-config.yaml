@@ -24,7 +24,7 @@ tvk_suggest: true
 # Auto create NS Backup Plan 
 tvk_autoprotect: true
 # List of NS to exclude
-tvk_autoprotect_exclude: ['openshift-storage', 'jeff-restore-from-ocpdemo']
+tvk_autoprotect_exclude: ['openshift-storage', 'openshift-operators']
 
 # app yaml to deploy
 tvk_deploy_demo_app: true

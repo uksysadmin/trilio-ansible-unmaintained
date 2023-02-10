@@ -110,7 +110,7 @@ ansible-playbook -e @secrets.enc --vault-ask-pass tvk-utility.yaml
 If using username/password authentication and not using kubeconfig specified in tvk-config.yaml<br>
 Then create a seperate file, *auth.enc*, and encrypt with the following structure:<br>
 ``` yaml
-kube_auth_api: https://auth_endpoint_url:6443
+k8s_auth_api: https://auth_endpoint_url:6443
 k8s_username: username
 k8s_password: password
 ```

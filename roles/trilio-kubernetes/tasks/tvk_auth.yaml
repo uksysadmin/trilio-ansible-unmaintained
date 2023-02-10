@@ -2,7 +2,7 @@
 # User can use kubeconfig or user/pass
 # If a user is authenticating using username/password:
 # Create an encrypted vault file with the following format
-# k8s_username: 
+# k8s_username:
 # k8s_password:
 # Pass this encrypted vault file on the ansible command line
 #
