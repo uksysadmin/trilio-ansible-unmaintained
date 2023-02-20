@@ -43,6 +43,6 @@
     when:
     - k8s_distro == 'openshift'
     - k8s_auth_type == 'password'
-  tags: ['auth', 'smoketest']
+  tags: ['always', 'auth', 'smoketest']
 
 

@@ -6,7 +6,7 @@
 - name: Create Namespace
   ansible.builtin.include_tasks: tvk_create_ns.yaml
   when: tvk_namespace | bool
-  tags: ['namespace', 'smoketest', 'create_target']
+  tags: ['namespace', 'smoketest', 'target']
 
 - name: Create Secret for S3
   block:
@@ -20,6 +20,8 @@
 
   - name: Create the secret used by the S3 target in the {{ tvk_namespace }} namespace
     kubernetes.core.k8s:
+      api_key: "{{ k8s_auth_results.k8s_auth.api_key }}"
+      kind: Secret
       state: present # State=present when you need to create new object
       namespace: "{{ tvk_namespace }}" # namespace for the secret
       validate_certs: false
@@ -44,6 +46,8 @@
 
   - name: Create the "{{ tvk_target_name }}" target in the {{ tvk_namespace }} namespace
     kubernetes.core.k8s:
+      api_key: "{{ k8s_auth_results.k8s_auth.api_key }}"
+      kind: Target
       state: present # State=present when you need to create new object
       namespace: "{{ tvk_namespace }}" # defining the namespace
       src: "/tmp/target.yaml"

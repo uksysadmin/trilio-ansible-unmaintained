@@ -6,7 +6,7 @@
 - name: Authentication to Kubernetes
   ansible.builtin.include_tasks: tvk_auth.yaml
   when: tvk_auth | bool
-  tags: ['auth']
+  tags: ['always', 'auth']
 
 - name: Basic Trilio for Kubernetes Checks
   ansible.builtin.include_tasks: tvk_check.yaml
@@ -33,4 +33,7 @@
   when: tvk_create_target | bool
   tags: ['backupplan']
 
-
+- name: Trilio for Kubernetes Execute a Backup
+  ansible.builtin.include_tasks: tvk_create_backup.yaml
+  when: tvk_create_target | bool
+  tags: ['backup']

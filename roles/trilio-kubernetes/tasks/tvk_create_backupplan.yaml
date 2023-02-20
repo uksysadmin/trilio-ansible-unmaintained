@@ -7,13 +7,14 @@
   block:
   - name: Configure backup plan in {{ tvk_namespace }}
     template:
-      src: templates/{{ tvk_backupplan_name }}-backupplan.yaml.j2
+      src: templates/backupplan.yaml.j2
       dest: /tmp/{{ tvk_backupplan_name }}-backupplan.yaml
 
   # Create the specified backup plan in specifed namespace
   - name: Create the "{{ tvk_backupplan_name }}" backup plan in {{ tvk_namespace }} namespace
     kubernetes.core.k8s:
       api_key: "{{ k8s_auth_results.k8s_auth.api_key }}"
+      kind: BackupPlan
       state: present # State=present when you need to create new object
       namespace: "{{ tvk_namespace }}" # defining the namespace
       src: "/tmp/{{ tvk_backupplan_name }}-backupplan.yaml"
@@ -47,5 +48,5 @@
     - k8s_auth_type == "password"
     - k8s_distro == "openshift"
   - debug: var=backupplan_available.stdout_lines
-  tags: ['backupplan', 'smoketest', 'autoprotect']
+  tags: ['backup', 'backupplan', 'smoketest', 'autoprotect']
 
