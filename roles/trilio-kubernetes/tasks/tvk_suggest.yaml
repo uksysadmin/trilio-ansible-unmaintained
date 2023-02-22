@@ -29,7 +29,7 @@
     debug:
       msg: "{{ recommended_ns_list }}"
 
-  tags: ['suggest', 'search', 'autoprotect']
+  tags: ['suggest', 'search', 'autoprotect', 'smoketest']
 
 - name: Calling backup plan creation task
   ansible.builtin.include_tasks: tvk_create_backupplan_test.yaml
