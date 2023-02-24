@@ -5,7 +5,7 @@
 
 - name: Create Namespace
   ansible.builtin.include_tasks: tvk_create_ns.yaml
-  when: tvk_namespace | bool
+  when: tvk_create_namespace | bool
   tags: ['namespace', 'smoketest', 'target']
 
 - name: Create Secret for S3
@@ -33,7 +33,7 @@
     ansible.builtin.file:
       path: /tmp/secrets.yaml
       state: absent
-  tags: ['secret', 'smoketest']
+  tags: ['target', 'secret', 'smoketest']
   when: tvk_target_type | lower == "s3"
 
 - name: Create Target

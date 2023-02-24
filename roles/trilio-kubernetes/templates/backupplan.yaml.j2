@@ -7,6 +7,12 @@ spec:
   backupConfig:
     target:
       name: {{ tvk_target_name }}
+  excludeResources:
+    gvkSelector:
+      - groupVersionKind:
+          group: "packages.operators.coreos.com"
+          kind: "PackageManifest"
+          version: "v1"
   {% if tvk_backupplan_type == 'label' %}
   backupPlanComponents:
     custom:

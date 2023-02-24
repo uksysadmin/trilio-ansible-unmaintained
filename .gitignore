@@ -43,3 +43,5 @@ license.*
 *.enc
 secret.yaml
 password_file
+
+overrides/
