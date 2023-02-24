@@ -35,10 +35,15 @@
 
 - name: Trilio for Kubernetes Execute a Backup
   ansible.builtin.include_tasks: tvk_create_backup.yaml
-  when: tvk_create_target | bool
+  when: tvk_create_backup | bool
   tags: ['backup', 'smoketest']
+
+- name: Trilio for Kubernetes Perform Restore
+  ansible.builtin.include_tasks: tvk_create_restore.yaml
+  when: tvk_create_restore | bool
+  tags: ['restore', 'smoketest']
 
 - name: Cleanup Trilio For Kubernetes Test
   ansible.builtin.include_tasks: tvk_cleanup.yaml
   when: tvk_cleanup | bool
-  tags: ['never', 'cleanup', 'smoketest']
+  tags: ['never', 'cleanup']
