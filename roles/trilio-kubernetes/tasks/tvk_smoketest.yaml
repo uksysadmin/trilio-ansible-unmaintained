@@ -3,11 +3,6 @@
 #
 # Authors: Kevin Jackson <kevin.jackson at trilio io>
 
-- name: Authentication to Kubernetes
-  ansible.builtin.include_tasks: tvk_auth.yaml
-  when: tvk_auth | bool
-  tags: ['smoketest']
-
 - name: Basic Trilio for Kubernetes Checks
   ansible.builtin.include_tasks: tvk_check.yaml
   when: tvk_check | bool
@@ -26,4 +21,14 @@
 - name: Trilio for Kubernetes Create Backup Plan
   ansible.builtin.include_tasks: tvk_create_backupplan.yaml
   when: tvk_create_target | bool
+  tags: ['smoketest']
+
+- name: Trilio for Kubernetes Execute a Backup
+  ansible.builtin.include_tasks: tvk_create_backup.yaml
+  when: tvk_create_backup | bool
+  tags: ['smoketest']
+
+- name: Trilio for Kubernetes Perform Restore
+  ansible.builtin.include_tasks: tvk_create_restore.yaml
+  when: tvk_create_restore | bool
   tags: ['smoketest']

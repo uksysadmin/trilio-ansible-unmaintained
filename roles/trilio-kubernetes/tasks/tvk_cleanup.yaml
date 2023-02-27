@@ -6,15 +6,6 @@
 - name: Remove Deployment
   tags: ['cleanup', 'smoketest']
   block:
-  #- name: Remove Deployment from {{ tvk_namespace }}
-  #  kubernetes.core.k8s:
-  #    api_key: "{{ k8s_auth_results.k8s_auth.api_key }}"
-  #    state: absent
-  #    namespace: "{{ tvk_namespace }}"
-  #    validate_certs: false
-  #    src: "{{ tvk_demo_app_yaml }}"
-  #    wait: true
-  #  register: cleanup_deployment
   - name: Collecting all Deployments from {{ tvk_namespace }}
     kubernetes.core.k8s_info:
       api_key: "{{ k8s_auth_results.k8s_auth.api_key }}"

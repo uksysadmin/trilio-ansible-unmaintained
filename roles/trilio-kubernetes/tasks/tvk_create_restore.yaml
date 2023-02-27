@@ -54,4 +54,3 @@
     - k8s_distro == "openshift"
   - debug: var=restore_available.stdout_lines
   tags: ['restore', 'backupplan', 'smoketest', 'autoprotect']
-
