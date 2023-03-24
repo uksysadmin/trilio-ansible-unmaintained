@@ -37,7 +37,6 @@
   - name: Checking for CSI Drivers
     kubernetes.core.k8s_info:
       api_version: storage.k8s.io/v1
-      api_key: "{{ k8s_auth_results.k8s_auth.api_key }}"
       kind: CSIDriver
       validate_certs: false
     register: csidrivers
@@ -45,7 +44,6 @@
   - name: Checking for VolumeSnapshot CRD
     kubernetes.core.k8s_info:
       api_version: apiextensions.k8s.io/v1
-      api_key: "{{ k8s_auth_results.k8s_auth.api_key }}"
       kind: CustomResourceDefinition
       name: volumesnapshot.snapshot.storage.k8s.io
       validate_certs: false
@@ -54,7 +52,6 @@
   - name: Checking for VolumeSnapshotClass CRD
     kubernetes.core.k8s_info:
       api_version: apiextensions.k8s.io/v1
-      api_key: "{{ k8s_auth_results.k8s_auth.api_key }}"
       kind: CustomResourceDefinition
       name: volumesnapshotclasses.snapshot.storage.k8s.io
       validate_certs: false
@@ -63,7 +60,6 @@
   - name: Checking for VolumeSnapshotContent CRD
     kubernetes.core.k8s_info:
       api_version: apiextensions.k8s.io/v1
-      api_key: "{{ k8s_auth_results.k8s_auth.api_key }}"
       kind: CustomResourceDefinition
       name: volumesnapshotclasses.snapshot.storage.k8s.io
       validate_certs: false
