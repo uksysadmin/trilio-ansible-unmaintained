@@ -20,7 +20,7 @@
 
   - name: Create the secret used by the S3 target in the {{ tvk_namespace }} namespace
     kubernetes.core.k8s:
-      api_key: "{{ k8s_auth_results.k8s_auth.api_key }}"
+      #api_key: "{{ k8s_auth_results.k8s_auth.api_key }}"
       kind: Secret
       state: present # State=present when you need to create new object
       namespace: "{{ tvk_namespace }}" # namespace for the secret
@@ -46,7 +46,7 @@
 
   - name: Create the "{{ tvk_target_name }}" target in the {{ tvk_namespace }} namespace
     kubernetes.core.k8s:
-      api_key: "{{ k8s_auth_results.k8s_auth.api_key }}"
+      #api_key: "{{ k8s_auth_results.k8s_auth.api_key }}"
       kind: Target
       state: present # State=present when you need to create new object
       namespace: "{{ tvk_namespace }}" # defining the namespace
