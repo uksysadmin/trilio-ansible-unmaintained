@@ -27,9 +27,7 @@
       validate_certs: false
       src: /tmp/secrets.yaml
     register: secret
-    when:
-    - k8s_secret.changed
-    - k8s_auth_type == 'password'
+    when: k8s_auth_type == 'password'
 
   - name: Create the secret used by the S3 target in the {{ tvk_namespace }} namespace (kubeconfig)
     kubernetes.core.k8s:
@@ -39,16 +37,15 @@
       validate_certs: false
       src: /tmp/secrets.yaml
     register: secret
-    when:
-    - k8s_secret.changed
-    - k8s_auth_type == 'kubeconfig'
+    when: k8s_auth_type == 'kubeconfig'
+  tags: ['target', 'smoketest']
 
-  - name: Remove temporary secret yaml
-    ansible.builtin.file:
-      path: /tmp/secrets.yaml
-      state: absent
-  tags: ['target', 'secret', 'smoketest']
-  when: tvk_target_type | lower == "s3"
+#  - name: Remove temporary secret yaml
+#    ansible.builtin.file:
+#      path: /tmp/secrets.yaml
+#      state: absent
+#  tags: ['target', 'secret', 'smoketest']
+#  when: tvk_target_type | lower == "s3"
 
 - name: Create Target
   block:
