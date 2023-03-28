@@ -27,7 +27,21 @@
       validate_certs: false
       src: /tmp/secrets.yaml
     register: secret
-    when: k8s_secret.changed
+    when:
+    - k8s_secret.changed
+    - k8s_auth_type == 'password'
+
+  - name: Create the secret used by the S3 target in the {{ tvk_namespace }} namespace (kubeconfig)
+    kubernetes.core.k8s:
+      kind: Secret
+      state: present # State=present when you need to create new object
+      namespace: "{{ tvk_namespace }}" # namespace for the secret
+      validate_certs: false
+      src: /tmp/secrets.yaml
+    register: secret
+    when:
+    - k8s_secret.changed
+    - k8s_auth_type == 'kubeconfig'
 
   - name: Remove temporary secret yaml
     ansible.builtin.file:
@@ -53,6 +67,17 @@
       src: "/tmp/target.yaml"
       validate_certs: false
     register: target
+    when: k8s_auth_type == 'password'
+
+  - name: Create the "{{ tvk_target_name }}" target in the {{ tvk_namespace }} namespace (kubeconfig)
+    kubernetes.core.k8s:
+      kind: Target
+      state: present # State=present when you need to create new object
+      namespace: "{{ tvk_namespace }}" # defining the namespace
+      src: "/tmp/target.yaml"
+      validate_certs: false
+    register: target
+    when: k8s_auth_type == 'password'
 
   # TODO: if not using kubeconfig auth, how to do kubectl?
   - name: Wait for "{{ tvk_target_name }}" target to be created in the {{ tvk_namespace }} namespace (kubeconfig)
