@@ -19,6 +19,17 @@
       src: "/tmp/{{ tvk_backupplan_name }}-backup.yaml"
       validate_certs: false
     register: backup
+    when: k8s_auth_type == "password"
+
+    - name: Execute the {{ tvk_backup_type }} backup {{ tvk_backupplan_name }}-{{ ansible_date_time.date }}-{{ ansible_date_time.epoch }} (kubeconfig)
+    kubernetes.core.k8s:
+      kind: Backup
+      state: present # State=present when you need to create new object
+      namespace: "{{ tvk_namespace }}" # defining the namespace
+      src: "/tmp/{{ tvk_backupplan_name }}-backup.yaml"
+      validate_certs: false
+    register: backup
+    when: k8s_auth_type == "kubeconfig"
 
   # TODO: if not using kubeconfig auth, how to do kubectl?
   - name: Wait for {{ tvk_backup_type }} {{ tvk_backupplan_name }}-{{ ansible_date_time.date }}-{{ ansible_date_time.epoch }} to complete (kubeconfig)
@@ -31,8 +42,7 @@
     delay: 60
     until: backup_available.stdout.find("Available") != -1
     ignore_errors: true
-    when:
-    - k8s_auth_type == "kubeconfig"
+    when: k8s_auth_type == "kubeconfig"
 
   - name: Wait for {{ tvk_backup_type }} {{ tvk_backupplan_name }}-{{ ansible_date_time.date }}-{{ ansible_date_time.epoch }} to complete (token)
     shell: |
