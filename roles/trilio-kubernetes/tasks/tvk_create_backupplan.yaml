@@ -24,7 +24,6 @@
 
   - name: Create the "{{ tvk_backupplan_name }}" backup plan in {{ tvk_namespace }} namespace (kubeconfig)
     kubernetes.core.k8s:
-      api_key: "{{ k8s_auth_results.k8s_auth.api_key }}"
       kind: BackupPlan
       state: present # State=present when you need to create new object
       namespace: "{{ tvk_namespace }}" # defining the namespace
