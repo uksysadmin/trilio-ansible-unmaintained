@@ -46,7 +46,6 @@
   - name: Checking for CSI Drivers (kubeconfig)
     kubernetes.core.k8s_info:
       api_version: storage.k8s.io/v1
-      api_key: "{{ k8s_auth_results.k8s_auth.api_key }}"
       kind: CSIDriver
       validate_certs: false
     register: csidrivers
