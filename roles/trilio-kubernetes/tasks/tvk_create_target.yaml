@@ -77,7 +77,7 @@
       src: "/tmp/target.yaml"
       validate_certs: false
     register: target
-    when: k8s_auth_type == 'password'
+    when: k8s_auth_type == 'kubeconfig'
 
   # TODO: if not using kubeconfig auth, how to do kubectl?
   - name: Wait for "{{ tvk_target_name }}" target to be created in the {{ tvk_namespace }} namespace (kubeconfig)
