@@ -35,7 +35,6 @@
   - name: Check Kubeconfig is available
     stat:
       path: "{{ kubeconfig }}"
-    register: k8s_auth_results
     when: k8s_auth_type == 'kubeconfig'
 
   - name: Auth Fact Set
