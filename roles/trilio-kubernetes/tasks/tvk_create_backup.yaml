@@ -21,7 +21,7 @@
     register: backup
     when: k8s_auth_type == "password"
 
-    - name: Execute the {{ tvk_backup_type }} backup {{ tvk_backupplan_name }}-{{ ansible_date_time.date }}-{{ ansible_date_time.epoch }} (kubeconfig)
+  - name: Execute the {{ tvk_backup_type }} backup {{ tvk_backupplan_name }}-{{ ansible_date_time.date }}-{{ ansible_date_time.epoch }} (kubeconfig)
     kubernetes.core.k8s:
       kind: Backup
       state: present # State=present when you need to create new object
