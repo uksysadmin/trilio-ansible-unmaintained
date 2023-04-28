@@ -67,6 +67,8 @@ tvk_create_restore: true
 tvk_restore_namespace: smoketest-restore
 
 # Used for migration/DR smoketest
-tvk_dr_restored_namespace: dr-restore
-tvk_dr_backupplan: "{{ backupplan_name }}" # if specified, uses last known backup
+tvk_migrate: true
+tvk_backupplan_skip_images: true
+tvk_migrate_namespace: migration-restore
+tvk_migrate_backupplan: "{{ tvk_backupplan_name }}" # if specified, uses last known backup
 tvk_location_id: # can specify which backup to restore to if known

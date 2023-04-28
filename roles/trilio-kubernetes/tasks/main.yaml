@@ -43,6 +43,11 @@
   when: tvk_create_restore | bool
   tags: ['never', 'restore']
 
+- name: Trilio for Kubernetes Execute a Migration
+  ansible.builtin.include_tasks: tvk_migration.yaml
+  when: tvk_migrate | bool
+  tags: ['migrate']
+
 - name: Trilio for Kubernetes Smoketest
   ansible.builtin.include_tasks: tvk_smoketest.yaml
   when: tvk_smoketest | bool

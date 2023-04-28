@@ -8,14 +8,26 @@
 #
 # Authors: Kevin Jackson <kevin.jackson at trilio io>
 
+
 - name: Kubernetes Authentication
   block:
+  - name: Configure Authentication
+    ansible.builtin.set_fact: username="{{ k8s_username }}" password="{{ k8s_password }}" host="{{ k8s_auth_api }}"
+    when:
+    - k8s_auth_type == 'password'
+
   - name: Log in to OpenShift (obtain access token)
+    #  - name: Configure Authentication for Migration
+    #    ansible.builtin.set_fact: username="{{ k8s_migrate_username }}" password="{{ k8s_migrate_password }}" host="{{ k8s_migrate_auth_api }}"
+    #    when:
+    #    - k8s_auth_type == 'password'
+    #    - tvk_migrate|bool
+
     community.okd.openshift_auth:
-      username: "{{ k8s_username }}"
-      password: "{{ k8s_password }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
       validate_certs: false
-      host: "{{ k8s_auth_api }}"
+      host: "{{ host }}"
     register: openshift_auth_results
     when:
     - k8s_distro == 'openshift'
@@ -42,6 +54,6 @@
     when:
     - k8s_distro == 'openshift'
     - k8s_auth_type == 'password'
-  tags: ['always', 'auth', 'smoketest']
+  tags: ['always', 'auth', 'smoketest', 'migrate']
 
 

@@ -7,6 +7,8 @@ spec:
   backupConfig:
     target:
       name: {{ tvk_target_name }}
+  backupPlanFlags:
+    skipImageBackup: {{ tvk_backupplan_skip_images }}
   excludeResources:
     gvkSelector:
       - groupVersionKind:

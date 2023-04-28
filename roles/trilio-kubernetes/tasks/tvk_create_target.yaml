@@ -6,7 +6,7 @@
 - name: Create Namespace
   ansible.builtin.include_tasks: tvk_create_ns.yaml
   when: tvk_create_namespace | bool
-  tags: ['namespace', 'smoketest', 'target']
+  tags: ['namespace', 'smoketest', 'target', 'migrate']
 
 - name: Create Secret for S3
   block:
@@ -103,7 +103,7 @@
     - k8s_auth_type == "password"
     - k8s_distro == "openshift"
   when: tvk_target_type | lower == "s3" # only s3 for now, template will have logic
-  tags: ['target', 'smoketest']
+  tags: ['target', 'smoketest', 'migrate']
 
 - debug:
     var: target_available.stdout_lines

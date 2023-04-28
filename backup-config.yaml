@@ -7,9 +7,8 @@ tvk_autoprotect: true
 tvk_autoprotect_exclude: ['openshift-storage', 'openshift-operators']
 
 # app yaml to deploy
-tvk_deploy_demo_app: true
-tvk_namespace: smoketest1
-tvk_demo_app_yaml: files/demo-mysql-app.yaml
+tvk_deploy_demo_app: false
+tvk_namespace: shailesh-label-backup
 
 #
 # Backup Target
@@ -19,7 +18,7 @@ tvk_demo_app_yaml: files/demo-mysql-app.yaml
 # TODO: Specify NFS or S3
 tvk_create_target: true
 tvk_target_type: S3
-tvk_target_name: smoketest-target
+tvk_target_name: vm-backup-target
 tvk_s3_bucket_name: tvk-migration-demo1
 tvk_secret_name: s3-access-secret
 
@@ -28,7 +27,7 @@ tvk_secret_name: s3-access-secret
 # Note this must be relevant to the test/demo app
 #
 tvk_create_backupplan: true
-tvk_backupplan_name: testing-app-backupplan
+tvk_backupplan_name: vm-backupplan
 tvk_backupplan_type: ns # ns|label
 tvk_backup_match_label: "app: k8s-demo-app" # ignored for ns backup type
 
