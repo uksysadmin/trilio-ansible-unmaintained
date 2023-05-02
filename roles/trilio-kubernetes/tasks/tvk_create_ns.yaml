@@ -1,21 +1,8 @@
-- name: Create Namespace
-  block:
-  - name: Create {{ tvk_namespace }} namespace
-    kubernetes.core.k8s:
-      name: "{{ tvk_namespace }}" # defining the namespace
-      api_version: v1
-      api_key: "{{ k8s_auth_results.k8s_auth.api_key }}"
-      kind: Namespace
-      validate_certs: false
-      state: present # State=present when you need to create new object
-    when: k8s_auth_type == 'password'
+# Set of tasks for creating a Trilio for Kubernetes Backup
+#
+# Authors: Kevin Jackson <kevin.jackson at trilio io>
 
-  - name: Create {{ tvk_namespace }} namespace (kubeconfig)
-    kubernetes.core.k8s:
-      name: "{{ tvk_namespace }}" # defining the namespace
-      api_version: v1
-      kind: Namespace
-      validate_certs: false
-      state: present # State=present when you need to create new object
-    when: k8s_auth_type == 'kubeconfig'
-  tags: ["namespace", "smoketest", "target", "deploy_app", "backupplan"]
+- name: Create Namespace
+  ansible.builtin.include_tasks: "tvk_create_ns_{{ k8s_auth_type }}.yaml"
+  when: tvk_create_namespace | bool
+  tags: ['namespace', 'ns', 'smoketest']

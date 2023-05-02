@@ -18,6 +18,11 @@
   when: tvk_suggest | bool
   tags: ['never', 'suggest', 'search', 'autoprotect']
 
+- name: Trilio for Kubernetes Create Namespace
+  ansible.builtin.include_tasks: tvk_create_ns.yaml
+  when: tvk_create_namespace | bool
+  tags: ['namespace', 'ns']
+
 - name: Trilio for Kubernetes Deploy App
   ansible.builtin.include_tasks: tvk_deploy_app.yaml
   when: tvk_deploy_demo_app | bool
