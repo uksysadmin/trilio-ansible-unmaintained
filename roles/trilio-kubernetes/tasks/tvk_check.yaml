@@ -5,6 +5,11 @@
 #
 # Authors: Kevin Jackson <kevin.jackson at trilio io>
 
+# To Do
+# Have Common Checks
+# Have <distro> Specific Checks
+#
+
 - name: Basic Kubernetes Checks
   block:
   - name: Check for kubectl

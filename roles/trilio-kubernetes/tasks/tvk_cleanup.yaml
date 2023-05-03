@@ -3,7 +3,7 @@
 #
 # Authors: Kevin Jackson <kevin.jackson at trilio io>
 
-- name: Remove Deployment
+- name: Execute Cleanup Tasks
   tags: ['cleanup', 'smoketest']
   block:
   - name: Collecting all Deployments from {{ tvk_namespace }}
@@ -35,7 +35,7 @@
       validate_certs: false
     register: backup_list
 
-  - name: Print Backup names
+  - name: List of Backups that will be removed
     debug:
       msg: "backup_list: {{ backup_list | json_query('resources[*].metadata.name')  }} "
 
@@ -61,4 +61,5 @@
       validate_certs: false
       state: absent
 
-  when: tvk_cleanup | bool
+  when:
+  - tvk_cleanup | bool
